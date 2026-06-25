@@ -6,9 +6,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"strings"
-
-	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 	"gorm.io/gorm/schema"
@@ -86,7 +83,7 @@ func (js JSONType[T]) GormValue(ctx context.Context, db *gorm.DB) clause.Expr {
 
 	switch db.Dialector.Name() {
 	case "mysql":
-		if v, ok := db.Dialector.(*mysql.Dialector); ok && !strings.Contains(v.ServerVersion, "MariaDB") {
+		if !isMariaDB(db.Dialector) {
 			return gorm.Expr("CAST(? AS JSON)", string(data))
 		}
 	}
@@ -157,7 +154,7 @@ func (j JSONSlice[T]) GormValue(ctx context.Context, db *gorm.DB) clause.Expr {
 
 	switch db.Dialector.Name() {
 	case "mysql":
-		if v, ok := db.Dialector.(*mysql.Dialector); ok && !strings.Contains(v.ServerVersion, "MariaDB") {
+		if !isMariaDB(db.Dialector) {
 			return gorm.Expr("CAST(? AS JSON)", string(data))
 		}
 	}
