@@ -6,6 +6,8 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+
+	"github.com/ugorji/go/codec"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 	"gorm.io/gorm/schema"
@@ -58,6 +60,14 @@ func (j JSONType[T]) MarshalJSON() ([]byte, error) {
 // UnmarshalJSON to deserialize []byte
 func (j *JSONType[T]) UnmarshalJSON(b []byte) error {
 	return json.Unmarshal(b, &j.data)
+}
+
+func (j JSONType[T]) CodecEncodeSelf(encoder *codec.Encoder) {
+	encoder.MustEncode(j.data)
+}
+
+func (j *JSONType[T]) CodecDecodeSelf(decoder *codec.Decoder) {
+	decoder.MustDecode(&j.data)
 }
 
 // GormDataType gorm common data type

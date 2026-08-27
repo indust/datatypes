@@ -1,10 +1,11 @@
 module gorm.io/datatypes
 
-go 1.19
+go 1.21
 
 require (
 	github.com/google/uuid v1.6.0
 	github.com/jinzhu/now v1.1.5
+	github.com/ugorji/go/codec v1.3.2
 	gorm.io/driver/mysql v1.5.6
 	gorm.io/driver/postgres v1.5.0
 	gorm.io/driver/sqlite v1.4.3
